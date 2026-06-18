@@ -122,7 +122,7 @@ body {
 .viewport { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 
 .track { position: absolute; top: 0; left: 0; height: 100%; display: flex; will-change: transform; z-index: 1; }
-.scene { position: relative; flex: 0 0 100vw; width: 100vw; height: 100vh; overflow: hidden; background: transparent; }
+.scene { position: relative; flex: 0 0 100vw; width: 100vw; height: 100vh; overflow: hidden; background: transparent; contain: layout paint; }
 
 /* --- one continuous sky behind the whole street (smooth day → night) --- */
 .sky-band {
@@ -330,7 +330,12 @@ body {
 /* ===========================================================
    QUESTION + CELEBRATION
    =========================================================== */
-.question { position: relative; z-index: 2; min-height: 100svh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 24px; }
+.question { position: relative; z-index: 2; min-height: 100svh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 24px;
+  /* ease out of the night sky (last stop) into the light-blue base, so the
+     hand-off from the neon dinner scene to the question is smooth */
+  background: linear-gradient(180deg,
+    #161b3e 0%, #2c2056 7%, #553c8c 15%, #8c6cb4 23%, #bfa9d6 31%,
+    #cfe0f3 42%, #dff3ff 56%, #e9f8ff 100%); }
 .question-inner { max-width: 660px; background: rgba(255,255,255,.7); backdrop-filter: blur(8px); padding: 40px 28px; border-radius: 36px; border: 3px solid #fff; box-shadow: var(--shadow); }
 .question-title { font-family: var(--font-display); font-size: clamp(3rem, 14vw, 6rem); margin: 0; color: var(--blue-ink); animation: bob 2.5s ease-in-out infinite; }
 .question-text { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 6vw, 2.8rem); color: var(--blue-deep); margin: 6px 0 36px; line-height: 1.25; }
@@ -347,7 +352,10 @@ body {
 
 .celebration { position: fixed; inset: 0; z-index: 9000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(183,226,255,.55); backdrop-filter: blur(7px); }
 .celebration.show { display: flex; animation: fadeIn .4s ease both; }
-.celebration-card { background: #fff; border-radius: 34px; padding: 40px 32px; max-width: 480px; text-align: center; box-shadow: 0 24px 60px rgba(31,127,224,.4); border: 4px solid var(--sky-1); animation: pop .6s cubic-bezier(.2,1.4,.4,1) both; }
+.celebration-card { position: relative; background: #fff; border-radius: 34px; padding: 40px 32px; max-width: 480px; text-align: center; box-shadow: 0 24px 60px rgba(31,127,224,.4); border: 4px solid var(--sky-1); animation: pop .6s cubic-bezier(.2,1.4,.4,1) both; }
+.celeb-close { position: absolute; top: 12px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.5rem; line-height: 1; color: var(--blue-deep); background: var(--sky-1); box-shadow: 0 3px 8px rgba(31,127,224,.25); transition: transform .15s ease, background .15s ease; }
+.celeb-close:hover { transform: scale(1.1) rotate(90deg); background: var(--sky-2); }
+.celeb-close:active { transform: scale(.95); }
 .celebration-emoji { font-size: 3rem; margin-bottom: 6px; animation: bob 1.6s ease-in-out infinite; }
 .celebration-card h2 { font-family: var(--font-display); font-size: clamp(2rem, 8vw, 3rem); color: var(--blue-ink); margin: 6px 0 12px; }
 .celebration-card p { font-size: 1.15rem; line-height: 1.6; font-weight: 500; margin: 0 0 24px; }
@@ -370,6 +378,15 @@ body {
   .b-mall, .b-hotpot, .b-zen, .b-restaurant, .b-cafe, .b-booth { width: clamp(210px, 68vw, 330px); }
   .billboard { padding: 8px 16px; }
   .question-inner { padding: 30px 20px; }
+
+  /* --- phone scroll performance ---
+     backdrop-filter and background-attachment:fixed are the two biggest
+     scroll-jank sources on mobile. Drop them and use solid fills instead. */
+  body { background-attachment: scroll; }
+  .info { backdrop-filter: none; background: rgba(255,255,255,.96); }
+  .s-night .info { backdrop-filter: none; background: rgba(26,22,52,.92); }
+  .question-inner, .celebration { backdrop-filter: none; }
+  .question-inner { background: rgba(255,255,255,.82); }
 }
 
 /* very small / narrow phones: stack the photo under the text so both stay roomy */

@@ -20,27 +20,40 @@
   const progressFill = document.getElementById("progress-fill");
   const progressCar = document.getElementById("progress-car");
   let ticking = false;
+  let activeIdx = -1;
 
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
+  // Cache layout metrics. Reading scrollWidth / offsetHeight / offsetTop
+  // forces a synchronous layout — doing it every scroll frame is what made
+  // the itinerary feel laggy on phones. We measure once and on resize only.
+  const M = { journeyTop: 0, total: 0, maxShift: 0, docMax: 0 };
+  function measure() {
+    if (!journey || !track) return;
+    M.journeyTop = journey.offsetTop;
+    M.total = journey.offsetHeight - window.innerHeight;
+    M.maxShift = track.scrollWidth - window.innerWidth;
+    M.docMax = document.documentElement.scrollHeight - window.innerHeight;
+  }
+
   function onScroll() {
-    // Overall page progress bar (hero → question)
-    const docMax = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = docMax > 0 ? clamp((window.scrollY / docMax) * 100, 0, 100) : 0;
+    const y = window.scrollY;
+    // Overall page progress bar (hero → question) — no layout reads
+    const pct = M.docMax > 0 ? clamp((y / M.docMax) * 100, 0, 100) : 0;
     if (progressFill) progressFill.style.width = pct + "%";
     if (progressCar) progressCar.style.left = pct + "%";
 
-    // Horizontal track within the journey section
+    // Horizontal track within the journey section (cached metrics only)
     if (journey && track && scenes.length) {
-      const total = journey.offsetHeight - window.innerHeight;
-      const scrolled = -journey.getBoundingClientRect().top;
-      const p = clamp(total > 0 ? scrolled / total : 0, 0, 1);
-      const maxShift = track.scrollWidth - window.innerWidth;
-      track.style.transform = "translate3d(" + -p * maxShift + "px,0,0)";
+      const p = clamp(M.total > 0 ? (y - M.journeyTop) / M.total : 0, 0, 1);
+      track.style.transform = "translate3d(" + (-p * M.maxShift) + "px,0,0)";
 
       const idx = Math.round(p * (scenes.length - 1));
-      for (let i = 0; i < scenes.length; i++) {
-        scenes[i].classList.toggle("active", i === idx);
+      if (idx !== activeIdx) { // only touch the DOM when the active stop changes
+        activeIdx = idx;
+        for (let i = 0; i < scenes.length; i++) {
+          scenes[i].classList.toggle("active", i === idx);
+        }
       }
     }
     ticking = false;
@@ -49,9 +62,11 @@
   function requestScroll() {
     if (!ticking) { window.requestAnimationFrame(onScroll); ticking = true; }
   }
+  measure();
   onScroll();
   window.addEventListener("scroll", requestScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
+  window.addEventListener("resize", () => { measure(); onScroll(); });
+  window.addEventListener("load", () => { measure(); onScroll(); });
 
   /* -------- 3. Runaway "No" button (vanishes after 10 catches) -------- */
   const noBtn = document.getElementById("btn-no");
@@ -67,25 +82,35 @@
     { passive: true }
   );
 
-  // Move the button to a random spot that stays fully on screen and
-  // isn't right under the pointer (so it's catchable but slippery).
+  // Move the button to a random spot inside a LIMITED, fully on-screen band
+  // (never the edges / top bar / off-screen), away from the pointer.
   function moveNo() {
     noBtn.classList.add("runaway");
     const bw = noBtn.offsetWidth || 110;
     const bh = noBtn.offsetHeight || 54;
-    const pad = 14;
-    const maxX = Math.max(pad, window.innerWidth - bw - pad);
-    const maxY = Math.max(pad, window.innerHeight - bh - pad);
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    // Roaming zone: horizontal 6%–94%, vertical 22%–88% of the viewport.
+    let minX = vw * 0.06;
+    let maxX = vw * 0.94 - bw;
+    let minY = vh * 0.22;
+    let maxY = vh * 0.88 - bh;
+    // Guard against tiny screens where the button barely fits.
+    if (maxX < minX) { minX = 6; maxX = Math.max(6, vw - bw - 6); }
+    if (maxY < minY) { minY = 6; maxY = Math.max(6, vh - bh - 6); }
     let x, y, tries = 0;
     do {
-      x = pad + Math.random() * (maxX - pad);
-      y = pad + Math.random() * (maxY - pad);
+      x = minX + Math.random() * (maxX - minX);
+      y = minY + Math.random() * (maxY - minY);
       tries++;
     } while (
       tries < 12 &&
       Math.abs(x + bw / 2 - lastMouse.x) < 140 &&
       Math.abs(y + bh / 2 - lastMouse.y) < 140
     );
+    // Final clamp — it can never leave the screen.
+    x = clamp(x, 4, vw - bw - 4);
+    y = clamp(y, 4, vh - bh - 4);
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
   }
@@ -140,8 +165,21 @@
     setTimeout(burst, 450); // one gentle follow-up (keeps it light)
   }
 
+  function closeCelebration() {
+    if (!celebration) return;
+    celebration.classList.remove("show");
+    celebration.setAttribute("aria-hidden", "true");
+  }
+
   if (yesBtn) yesBtn.addEventListener("click", sayYes);
   if (againBtn) againBtn.addEventListener("click", () => { burst(); });
+
+  const celebClose = document.getElementById("celeb-close");
+  if (celebClose) celebClose.addEventListener("click", closeCelebration);
+  // Click the dimmed backdrop (outside the card) to dismiss too.
+  if (celebration) celebration.addEventListener("click", (e) => {
+    if (e.target === celebration) closeCelebration();
+  });
 
   /* -------- 5. Self-contained confetti (perf-tuned) -------- */
   const canvas = document.getElementById("confetti-canvas");
