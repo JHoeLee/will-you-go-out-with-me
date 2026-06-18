@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Day in JB, with you? 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Confetti canvas (sits above everything) -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Sparkle cursor trail canvas -->
+  <canvas id="sparkle-canvas"></canvas>
+
+  <!-- Journey progress bar -->
+  <div class="progress-track" aria-hidden="true">
+    <div class="progress-fill" id="progress-fill"></div>
+    <div class="progress-car" id="progress-car">🚗</div>
+  </div>
+
+  <!-- Sky scenery (fixed background) -->
+  <div class="sky" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="cloud cloud-4"></div>
+    <div class="cloud cloud-5"></div>
+    <div class="star star-1">✦</div>
+    <div class="star star-2">✦</div>
+    <div class="star star-3">✦</div>
+    <div class="star star-4">✦</div>
+    <div class="star star-5">✦</div>
+    <div class="star star-6">✦</div>
+  </div>
+
+  <!-- Floating decorations -->
+  <div class="floating-hearts" aria-hidden="true">
+    <span>💙</span><span>☁️</span><span>⭐</span><span>🩵</span><span>✨</span><span>🎈</span>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="hero-kicker">Dear Dummy 💌</p>
+      <h1 class="hero-title">Will you spend<br />a day in JB<br />with me?</h1>
+      <p class="hero-sub">I planned our whole day out, from Singapore to Johor Bahru.<br />Scroll down and let me take you along the ride… 🚗💨</p>
+      <div class="scroll-hint">
+        <span>scroll down</span>
+        <div class="arrow">↓</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== ITINERARY / HORIZONTAL DRIVE ===== -->
+  <main class="journey" id="journey">
+    <div class="viewport">
+      <!-- The street that the buildings sit on -->
+      <div class="track" id="track">
+
+        <!-- continuous day → night sky behind every scene -->
+        <div class="sky-band" aria-hidden="true"></div>
+
+        <!-- STOP 1 · Dim Sum · rundown authentic restaurant -->
+        <section class="scene s-morning" data-i="0">
+          <div class="info">
+            <div class="info-text">
+              <span class="time">0930h</span>
+              <h2>Dim Sum 🥟</h2>
+              <p class="place">Restoran Kak Kak</p>
+              <p class="desc">First stop — a no-frills, old-school spot. The realest dim sum, fresh out the bamboo steamer.</p>
+            </div>
+            <img class="info-photo" src="images/stop1-dimsum.svg" alt="Dim sum" loading="lazy" onerror="this.style.display='none'" />
+          </div>
+          <div class="building b-restaurant">
+            <div class="b-roof"></div>
+            <div class="b-awning"></div>
+            <div class="b-sign">RESTORAN KAK KAK</div>
+            <div class="b-body">
+              <span class="crack"></span>
+              <span class="stain"></span>
+              <div class="win"></div><div class="win"></div>
+              <div class="door"></div>
+            </div>
+            <span class="prop lantern l1">🏮</span>
+            <span class="prop lantern l2">🏮</span>
+            <span class="prop baskets">🥟</span>
+            <span class="steam steamA"></span>
+            <span class="steam steamB"></span>
+          </div>
+        </section>
+
+        <!-- STOP 2 · Massage · zen resort -->
+        <section class="scene s-late-morning" data-i="1">
+          <div class="info">
+            <div class="info-text">
+              <span class="time">1100h</span>
+              <h2>Massage 💆‍♀️</h2>
+              <p class="place">Thong Yee Thong</p>
+              <p class="desc">Time to unwind at a little zen retreat. Let every knot melt away.</p>
+            </div>
+            <img class="info-photo" src="images/stop2-massage.svg" alt="Massage" loading="lazy" onerror="this.style.display='none'" />
+          </div>
+          <div class="building b-zen">
+            <div class="zen-roof"></div>
+            <div class="b-sign zen-sign">Thong Yee Thong</div>
+            <div class="zen-body">
+              <div class="shoji"></div><div class="shoji"></div><div class="shoji"></div>
+              <div class="zen-door"></div>
+            </div>
+            <span class="prop bamboo">🎋</span>
+            <span class="prop lotus">🪷</span>
+            <span class="prop stones">🪨</span>
+            <div class="zen-pond"></div>
+            <span class="steam incense"></span>
+          </div>
+        </section>
+
+        <!-- STOP 3 · Lunch · indie cafe -->
+        <section class="scene s-midday" data-i="2">
+          <div class="info">
+            <div class="info-text">
+              <span class="time">1330h</span>
+              <h2>Lunch ☕</h2>
+              <p class="place">Yeon Cafe</p>
+              <p class="desc">A cosy indie cafe — good coffee, plants everywhere, and just us two.</p>
+            </div>
+            <img class="info-photo" src="images/stop3-lunch.svg" alt="Lunch" loading="lazy" onerror="this.style.display='none'" />
+          </div>
+          <div class="building b-cafe">
+            <div class="cafe-lights"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="b-sign cafe-sign">Yeon Cafe</div>
+            <div class="cafe-awning"></div>
+            <div class="cafe-body">
+              <div class="cafe-window"><span class="chalk">today<br>☕ 🥐</span></div>
+              <div class="cafe-door"></div>
+            </div>
+            <span class="prop plant p1">🪴</span>
+            <span class="prop plant p2">🪴</span>
+            <span class="prop hangplant">🌿</span>
+            <span class="prop bike">🚲</span>
+          </div>
+        </section>
+
+        <!-- STOP 4 · Movie · big mall -->
+        <section class="scene s-afternoon" data-i="3">
+          <div class="info">
+            <div class="info-text">
+              <span class="time">1430h</span>
+              <h2>Movie: <em>Dear You</em> 🎬</h2>
+              <p class="place">GSC · Mid Valley Southkey</p>
+              <p class="desc">Into the big mall we go — popcorn in hand for <em>Dear You</em>.</p>
+            </div>
+            <img class="info-photo" src="images/stop4-movie.svg" alt="Movie" loading="lazy" onerror="this.style.display='none'" />
+          </div>
+          <div class="building b-mall">
+            <div class="mall-top">MID VALLEY SOUTHKEY</div>
+            <div class="mall-body">
+              <div class="mall-glass"></div>
+              <div class="marquee">🎬 NOW SHOWING · <em>DEAR YOU</em> · GSC</div>
+              <div class="mall-entrance"></div>
+            </div>
+            <span class="prop popcorn">🍿</span>
+          </div>
+        </section>
+
+        <!-- STOP 5 · Photobooth · inside the same mall -->
+        <section class="scene s-golden" data-i="4">
+          <div class="info">
+            <div class="info-text">
+              <span class="time">1700h</span>
+              <h2>Photobooth 📸</h2>
+              <p class="place">The Film · Mid Valley Southkey</p>
+              <p class="desc">Still in the mall — let's grab silly photo strips to keep forever.</p>
+            </div>
+            <img class="info-photo" src="images/stop5-photobooth.svg" alt="Photobooth" loading="lazy" onerror="this.style.display='none'" />
+          </div>
+          <div class="building b-booth">
+            <div class="booth-mall-bg"></div>
+            <div class="b-sign booth-sign">★ THE FILM ★</div>
+            <div class="booth-machine">
+              <div class="booth-lens">📷</div>
+              <div class="booth-curtain"></div>
+              <div class="booth-flash"></div>
+            </div>
+            <div class="photo-strip">
+              <span>😄</span><span>😘</span><span>🥰</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STOP 6 · Dinner · neon hotpot -->
+        <section class="scene s-night" data-i="5">
+          <div class="info">
+            <div class="info-text">
+              <span class="time">1800h</span>
+              <h2>Dinner 🍲</h2>
+              <p class="place">Lala Claypot @ Clams Man</p>
+              <p class="desc">We end under the neon glow with a steaming lala claypot. The perfect finale.</p>
+            </div>
+            <img class="info-photo" src="images/stop6-dinner.svg" alt="Dinner" loading="lazy" onerror="this.style.display='none'" />
+          </div>
+          <span class="moon">🌙</span>
+          <span class="nstar n1">✦</span><span class="nstar n2">✦</span>
+          <span class="nstar n3">✦</span><span class="nstar n4">✦</span>
+          <div class="building b-hotpot">
+            <div class="billboard">
+              <span class="neon-main">CLAMS MAN</span>
+              <span class="neon-sub">🦞 LALA CLAYPOT 🦞</span>
+            </div>
+            <div class="hotpot-body">
+              <div class="nwin"></div><div class="nwin"></div><div class="nwin"></div>
+              <div class="hotpot-door"></div>
+            </div>
+            <span class="prop claypot">🍲</span>
+            <span class="steam steamC"></span>
+            <span class="steam steamD"></span>
+          </div>
+          <div class="neon-glow"></div>
+        </section>
+
+      </div>
+
+      <!-- Single road + driving car shared across all scenes -->
+      <div class="road" aria-hidden="true">
+        <div class="dashes"></div>
+        <div class="curb"></div>
+      </div>
+
+      <div class="car" id="car" aria-hidden="true">
+        <div class="speed"></div>
+        <!-- car clearly faces RIGHT (the direction of travel): blunt rear + tail light on the left, sloped hood + big headlight on the right -->
+        <svg viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="62" cy="63" rx="52" ry="6" fill="rgba(40,90,140,0.18)"/>
+          <path d="M8 52 L8 39 Q8 36 11 36 L34 36 Q39 20 57 20 L73 20 Q88 21 98 31 L110 35 Q117 38 117 45 L116 52 Z" fill="#48b0ff"/>
+          <path d="M8 52 L8 48 L117 50 L116 52 Z" fill="#2e95f0" opacity="0.35"/>
+          <!-- windscreen, slanting toward the front (right) -->
+          <path d="M40 33 Q44 23 57 23 L72 23 Q85 24 93 33 Z" fill="#eaf6ff"/>
+          <line x1="66" y1="23" x2="66" y2="33" stroke="#2e95f0" stroke-width="2"/>
+          <text x="30" y="47" font-size="11" text-anchor="middle">💙</text>
+          <!-- big FRONT headlight (right) + small REAR tail light (left) -->
+          <circle cx="111" cy="42" r="4.4" fill="#fff3a8" stroke="#ffdf86" stroke-width="1"/>
+          <rect x="8" y="40" width="4.5" height="6" rx="1.5" fill="#ff6b78"/>
+          <!-- wheels -->
+          <circle cx="36" cy="54" r="11" fill="#27384a"/>
+          <g class="wheel">
+            <circle cx="36" cy="54" r="5" fill="#cfe6f7"/>
+            <rect x="35" y="45" width="2" height="18" fill="#9fc4dd"/>
+            <rect x="27" y="53" width="18" height="2" fill="#9fc4dd"/>
+          </g>
+          <circle cx="88" cy="54" r="11" fill="#27384a"/>
+          <g class="wheel">
+            <circle cx="88" cy="54" r="5" fill="#cfe6f7"/>
+            <rect x="87" y="45" width="2" height="18" fill="#9fc4dd"/>
+            <rect x="79" y="53" width="18" height="2" fill="#9fc4dd"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== THE QUESTION ===== -->
+  <section class="question" id="question">
+    <div class="question-inner">
+      <h2 class="question-title">So… 🥺</h2>
+      <p class="question-text">Will you go on this date with me, Yi Xuan?</p>
+      <div class="btn-row">
+        <button class="btn-yes" id="btn-yes" type="button">Yes! 💖</button>
+        <button class="btn-no" id="btn-no" type="button">No</button>
+      </div>
+      <p class="hint-no" id="hint-no">(psst… try to catch the "No" button 😉)</p>
+    </div>
+  </section>
+
+  <!-- ===== CELEBRATION OVERLAY ===== -->
+  <div class="celebration" id="celebration" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="celebration-card">
+      <div class="celebration-emoji">🎉🚗💙🎉</div>
+      <h2>Yay! It's a date!</h2>
+      <p>See you in JB, Yi Xuan ❤️<br />I can't wait to spend the day with you.</p>
+      <button class="btn-yes" id="btn-again" type="button">More confetti! 🎊</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

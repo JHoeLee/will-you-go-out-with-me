@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Dim Sum placeholder">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe3ec"/>
+      <stop offset="1" stop-color="#ffc2d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g1)"/>
+  <text x="400" y="300" font-size="180" text-anchor="middle" dominant-baseline="central">🥟</text>
+  <text x="400" y="460" font-size="44" text-anchor="middle" font-family="'Segoe UI',sans-serif" fill="#c2185b" font-weight="700">Dim Sum</text>
+  <text x="400" y="510" font-size="26" text-anchor="middle" font-family="'Segoe UI',sans-serif" fill="#d81b60">replace with your photo</text>
+</svg>
