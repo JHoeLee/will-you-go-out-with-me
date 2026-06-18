@@ -123,19 +123,14 @@
     lastDodge = now;
     noCount++;
     moveNo();
-    if (hintNo) {
-      const left = MAX_TRIES - noCount;
-      hintNo.textContent = left > 0
-        ? "catch the “No” if you can… " + left + " to go 😜"
-        : "";
-    }
+    if (hintNo) hintNo.textContent = "Why are you pressing No... :( :(";
     if (noCount >= MAX_TRIES) vanishNo();
   }
 
   function vanishNo() {
     noBtn.classList.add("poof");
     setTimeout(() => { noBtn.style.display = "none"; }, 350);
-    if (hintNo) hintNo.textContent = "see? “Yes” was the only choice all along 💖";
+    if (hintNo) hintNo.textContent = "Only YES allowed hehehe";
   }
 
   if (noBtn) {
